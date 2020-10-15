@@ -1,9 +1,10 @@
+import { Game } from "./game";
+
 class App {
 
-    public run() {
-        console.log('Hello world');
+    constructor() {
+        new Game("Mike").start();
     }
-
 }
 
-new App().run();
+new App();

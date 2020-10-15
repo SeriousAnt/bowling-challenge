@@ -11,24 +11,40 @@ export class Game {
     public start(): void {
         let index = 0;
         console.debug('Starting game with ' + this.playerName);
-        while (this.frames.length <= 10) {
-            const frame = this.playFrame(new Frame());
+        // iteratively creates 10 frames to play
+        while (this.frames.length < 10) {
+            const frame = this.playFrame(index, new Frame());
             this.distributeBonus(index, frame)
             this.frames.push(frame);
             index++;
         }
+        this.logTotals();
     }
 
-    public playFrame(frame: Frame): Frame {
+    private logTotals(): void {
+        let total = 0;
+        this.frames.forEach((frame, index) => {
+            console.debug('Frame no. ' + (index + 1).toString() + ': Total: ' + frame.getFrameTotal() + ' (Bonus: ' + frame.getBonus() + ') ' + frame.getRollResults().join(','))
+            total += frame.getFrameTotal() + frame.getBonus();
+        });
+        console.debug(this.playerName + ' Total: ' + total);
+    }
+
+    private playFrame(index: number, frame: Frame): Frame {
         const firstRoll = this.getMockResult()
         frame.setRollResult(firstRoll)
+        // if first roll is not a strike roll again 
         if (!frame.isStrike()) {
+            frame.setRollResult(this.getMockResult(firstRoll))
+        }
+        // if last frame and strike or spare (another roll)
+        if ((frame.isStrike() || frame.isSpare()) && index === 9) {
             frame.setRollResult(this.getMockResult(firstRoll))
         }
         return frame;
     }
 
-    public distributeBonus(index: number, frame: Frame): void {
+    private distributeBonus(index: number, frame: Frame): void {
         // check if previous frame is spare and set bonus
         if (index >= 1 && this.frames[index - 1].isSpare()) {
             this.frames[index - 1].setBonus(frame.getRollResults()[0])
@@ -43,9 +59,9 @@ export class Game {
         }
     }
 
-    public getMockResult(previousResult = 0): number {
+    // mocks a roll result
+    private getMockResult(previousResult = 0): number {
         const result = Math.random() * (previousResult > 0 ? 10 - previousResult : 10);
-        console.debug("Mocked roll result: " + Math.round(result));
         return Math.round(result);
     }
 
