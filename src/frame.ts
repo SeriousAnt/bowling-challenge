@@ -1,31 +1,39 @@
 export class Frame {
 
     constructor() {
-        this.rollResult = [];
+        this.rollResults = [];
         this.bonus = 0;
     }
 
-    private rollResult: number[];
+    private rollResults: number[];
     private bonus: number;
 
     public isStrike(): boolean {
-        return this.rollResult.length === 1 && this.rollResult[0] === 10;
+        return this.rollResults.length === 1 && this.rollResults[0] === 10;
     }
 
     public isSpare(): boolean {
-        return this.rollResult.length === 2 && this.rollResult.reduce((p, c) => c + p, 0) === 10;
+        return this.rollResults.length === 2 && this.getFrameTotal() === 10;
     }
 
     public setRollResult(result: number): void {
-        this.rollResult.push(result);
+        this.rollResults.push(result);
+    }
+
+    public getRollResults(): number[] {
+        return this.rollResults;
     }
 
     public setBonus(bonus: number): void {
         this.bonus = bonus;
     }
 
+    public getBonus(): number {
+        return this.bonus;
+    }
+
     public getFrameTotal(): number {
-        return this.rollResult.reduce((p, c) => c + p, 0) + this.bonus;
+        return this.rollResults.reduce((p, c) => c + p, 0);
     }
 
 
