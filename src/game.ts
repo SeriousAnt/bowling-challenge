@@ -10,7 +10,6 @@ export class Game {
 
     public start(): void {
         let index = 0;
-        console.debug('Starting game with ' + this.playerName);
         // iteratively creates 10 frames to play
         while (this.frames.length < 10) {
             const frame = this.playFrame(index, new Frame());
@@ -27,7 +26,7 @@ export class Game {
             console.debug('Frame no. ' + (index + 1).toString() + ': Total: ' + frame.getFrameTotal() + ' (Bonus: ' + frame.getBonus() + ') ' + frame.getRollResults().join(','))
             total += frame.getFrameTotal() + frame.getBonus();
         });
-        console.debug(this.playerName + ' Total: ' + total);
+        console.debug(this.playerName + ' scored a total of ' + total);
     }
 
     private playFrame(index: number, frame: Frame): Frame {
@@ -52,6 +51,7 @@ export class Game {
         // check if frame before is strike
         if (index >= 2 && this.frames[index - 2].isStrike()) {
             if (!this.frames[index - 1].isStrike()) {
+                // if not strike then get the two rolls from previous frame
                 this.frames[index - 2].setBonus(this.frames[index - 1].getFrameTotal())
             } else {
                 this.frames[index - 2].setBonus(this.frames[index - 1].getRollResults()[0] + frame.getRollResults()[0])
