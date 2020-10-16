@@ -4,7 +4,7 @@
   "description": "A bowling score keeping application as code challenge",
   "main": "dist/index.js",
   "scripts": {
-    "start": "npm run build && node dist",
+    "start": "npm run build && node dist/src/index.js",
     "lint": "eslint ./src",
     "build": "tsc",
     "test": "mocha -r ts-node/register test/**/*.spec.ts"
